@@ -1,14 +1,19 @@
 import { FC } from 'react';
 import { Section } from '../../types';
+import { RouteComponentProps, withRouter } from 'react-router';
 import './menu-item.styles.scss';
 
-export type MenuItemProps = {
+export interface MenuItemProps extends RouteComponentProps {
   section: Section;
-};
+}
 
-const MenuItem: FC<MenuItemProps> = ({ section }) => {
+const MenuItem: FC<MenuItemProps> = ({ section, history, match }) => {
+  console.log(match);
   return (
-    <div className={`menu-item ${section.size}`}>
+    <div
+      className={`menu-item ${section.size}`}
+      onClick={() => history.push(`${match.url}${section.linkUrl}`)}
+    >
       <div
         className="background-image"
         style={{
@@ -23,4 +28,4 @@ const MenuItem: FC<MenuItemProps> = ({ section }) => {
   );
 };
 
-export default MenuItem;
+export default withRouter(MenuItem);
