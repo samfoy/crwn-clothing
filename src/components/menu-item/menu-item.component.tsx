@@ -8,7 +8,6 @@ export interface MenuItemProps extends RouteComponentProps {
 }
 
 const MenuItem: FC<MenuItemProps> = ({ section, history, match }) => {
-  console.log(match);
   return (
     <div
       className={`menu-item ${section.size}`}
