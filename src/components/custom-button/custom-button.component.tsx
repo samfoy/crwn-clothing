@@ -2,12 +2,18 @@ import React, { FC } from 'react';
 
 import './custom-button.style.scss';
 
-const CustomButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
-  children,
-  ...otherprops
-}) => {
+export type CustomButtonProps = {
+  isGoogleSignIn?: boolean;
+};
+
+const CustomButton: FC<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & CustomButtonProps
+> = ({ children, isGoogleSignIn, ...otherprops }) => {
   return (
-    <button className="custom-button" {...otherprops}>
+    <button
+      className={`${isGoogleSignIn ? 'google-sign-in' : ''} custom-button`}
+      {...otherprops}
+    >
       {children}
     </button>
   );
