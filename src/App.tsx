@@ -7,11 +7,15 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import firebase from 'firebase/compat';
 
-export type AppState = {
-  currentUser: firebase.User | null;
+export type MyUser = firebase.firestore.DocumentData & {
+  id: string;
+};
+
+type AppState = {
+  currentUser: MyUser | null;
 };
 
 class App extends React.Component<{}, AppState> {
@@ -22,8 +26,22 @@ class App extends React.Component<{}, AppState> {
   unsubscribeFromAuth: firebase.Unsubscribe | null = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+        if (!userRef) return;
+        userRef.onSnapshot(snapshot => {
+          this.setState({
+            currentUser:
+              {
+                id: snapshot.id,
+                ...snapshot.data()
+              }
+          });
+          console.log(this.state);
+        });
+      }
+      this.setState({ currentUser: null });
     });
   }
 
