@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
+import firebase from 'firebase/compat';
 
 import './App.scss';
 
@@ -8,7 +9,6 @@ import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-import firebase from 'firebase/compat';
 
 export type MyUser = firebase.firestore.DocumentData & {
   id: string;
@@ -38,7 +38,6 @@ class App extends React.Component<{}, AppState> {
                 ...snapshot.data()
               }
           });
-          console.log(this.state);
         });
       }
       this.setState({ currentUser: null });

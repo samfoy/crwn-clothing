@@ -36,7 +36,6 @@ class SignUp extends React.Component<{}, SignUpState> {
         password
       );
       createUserProfileDocument(user, { displayName });
-      debugger;
       this.setState(st => ({
         displayName: '',
         email: '',
