@@ -38,7 +38,6 @@ class App extends React.Component<{}, AppState> {
                 ...snapshot.data()
               }
           });
-          console.log(this.state);
         });
       }
       this.setState({ currentUser: null });
