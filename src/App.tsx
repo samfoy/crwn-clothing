@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, Redirect } from 'react-router';
 import firebase from 'firebase/compat';
 import { connect, ConnectedProps } from 'react-redux';
 
@@ -12,17 +12,10 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 
 import { setCurrentUser } from './redux/user/user.actions';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { State } from './redux/root-reducer';
 import { IUser, UserAction } from './types';
 
-export type MyUser = firebase.firestore.DocumentData & {
-  id: string;
-};
-
-type AppState = {
-  currentUser: MyUser | null;
-};
-
-class App extends React.Component<AppProps, AppState> {
+class App extends React.Component<AppProps, State> {
   unsubscribeFromAuth: firebase.Unsubscribe | null = null;
 
   async componentDidMount() {
@@ -55,18 +48,31 @@ class App extends React.Component<AppProps, AppState> {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUpPage} />
+          <Route
+            exact
+            path="/signin"
+            render={() =>
+              this.props.currentUser ? (
+                <Redirect to="/" />
+              ) : (
+                <SignInAndSignUpPage />
+              )}
+          />
         </Switch>
       </div>
     );
   }
 }
 
+const mapStateToProps = (state: State) => {
+  return { currentUser: state.user.currentUser };
+};
+
 const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => ({
   setCurrentUser: (user: IUser) => dispatch(setCurrentUser(user) as UserAction)
 });
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type AppProps = ConnectedProps<typeof connector>;
 
