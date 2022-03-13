@@ -1,20 +1,10 @@
-import firebase from 'firebase/compat';
-import { AnyAction } from 'redux'
-
-type MyUser = firebase.firestore.DocumentData & {
-  id: string;
-};
-
-type UserState = {
-  currentUser: MyUser | null;
-};
-
+import type { UserAction, UserState } from '../../types';
 
 const INITIAL_STATE: UserState = {
   currentUser: null
 }
 
-const userReducer = (state: UserState = INITIAL_STATE, action: AnyAction) => {
+const userReducer = (state: UserState = INITIAL_STATE, action: UserAction) => {
   switch (action.type) {
     case 'SET_CURRENT_USER':
       return {

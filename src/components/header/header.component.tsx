@@ -1,16 +1,14 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { connect, ConnectedProps } from 'react-redux';
 
-import firebase from 'firebase/compat';
 import { auth } from '../../firebase/firebase.utils';
+
+import { State } from '../../redux/root-reducer';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
 import './header.style.scss';
-
-export type HeaderProps = {
-  currentUser: firebase.User | null;
-};
 
 const Header: FC<HeaderProps> = ({ currentUser }) => {
   return (
@@ -39,4 +37,12 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state: State) => {
+  return { currentUser: state.user.currentUser };
+};
+
+const connector = connect(mapStateToProps);
+
+type HeaderProps = ConnectedProps<typeof connector>;
+
+export default connector(Header);
