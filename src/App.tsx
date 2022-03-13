@@ -1,7 +1,8 @@
 import React, { Dispatch } from 'react';
 import { Route, Switch, Redirect } from 'react-router';
-import firebase from 'firebase/compat';
 import { connect, ConnectedProps } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import firebase from 'firebase/compat';
 
 import './App.scss';
 
@@ -9,6 +10,7 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import { selectCurrentUser } from './redux/user/user.selector';
 
 import { setCurrentUser } from './redux/user/user.actions';
 import { IUser, UserActions } from './redux/user/user.types';
@@ -64,9 +66,9 @@ class App extends React.Component<AppProps, State> {
   }
 }
 
-const mapStateToProps = (state: State) => {
-  return { currentUser: state.user.currentUser };
-};
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<UserActions>) => ({
   setCurrentUser: (user: IUser | null) => dispatch(setCurrentUser(user))
