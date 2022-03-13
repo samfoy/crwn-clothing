@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import { Collection, Item } from '../../types';
-import CollectionPreview from '../../components/collection-preview/collection-preview';
+import { Collection } from '../../types';
+import CollectionPreview from '../../components/collection-preview/collection-preview.component';
 import shopData from './shop.data';
 
 type ShopProps = {};
