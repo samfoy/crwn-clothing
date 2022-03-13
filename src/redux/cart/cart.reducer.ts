@@ -1,13 +1,12 @@
-import { AnyAction } from "redux";
-import { Item } from "../../types";
-import { CartActionTypes } from "./cart.types";
+import { Reducer } from "redux";
+import { CartActionTypes, CartActions, CartState } from "./cart.types";
 
 const INITIAL_STATE = {
   hidden: true,
   cartItems: []
 }
 
-const cartReducer = (state: CartState = INITIAL_STATE, action: AnyAction) => {
+const cartReducer: Reducer<CartState, CartActions> = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case CartActionTypes.TOGGLE_CART_HIDDEN:
       return {
@@ -24,9 +23,6 @@ const cartReducer = (state: CartState = INITIAL_STATE, action: AnyAction) => {
   }
 }
 
-export interface CartState {
-  hidden: boolean,
-  cartItems: Item[]
-}
+
 
 export default cartReducer;

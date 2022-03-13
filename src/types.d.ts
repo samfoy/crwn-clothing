@@ -1,4 +1,3 @@
-import firebase from "firebase/compat";
 export interface Section {
   title: string;
   imageUrl: string;
@@ -19,19 +18,4 @@ export interface Item {
   name: string;
   imageUrl: string;
   price: number;
-}
-
-interface IUserBase extends firebase.firestore.DocumentData {
-  id: string
-}
-
-export type IUser = IUserBase | null
-
-export type UserState = {
-  currentUser: IUser | null;
-};
-
-export type UserAction = {
-  type: 'SET_CURRENT_USER';
-  payload: IUser
 }

@@ -11,9 +11,9 @@ import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 
 import { setCurrentUser } from './redux/user/user.actions';
+import { IUser, UserActions } from './redux/user/user.types';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { State } from './redux/root-reducer';
-import { IUser, UserAction } from './types';
 
 class App extends React.Component<AppProps, State> {
   unsubscribeFromAuth: firebase.Unsubscribe | null = null;
@@ -68,8 +68,8 @@ const mapStateToProps = (state: State) => {
   return { currentUser: state.user.currentUser };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => ({
-  setCurrentUser: (user: IUser) => dispatch(setCurrentUser(user) as UserAction)
+const mapDispatchToProps = (dispatch: Dispatch<UserActions>) => ({
+  setCurrentUser: (user: IUser | null) => dispatch(setCurrentUser(user))
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
