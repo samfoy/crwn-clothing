@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import './homepage.style.scss';
+import './home.style.scss';
 import Directory from '../../components/directory/directory.component';
 
-const HomePage: FC = () => (
+const Home: FC = () => (
   <div className="homepage">
     <Directory />
   </div>
 );
 
-export default HomePage;
+export default Home;

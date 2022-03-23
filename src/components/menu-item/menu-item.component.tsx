@@ -1,17 +1,20 @@
 import { FC } from 'react';
 import { Section } from '../../types';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './menu-item.styles.scss';
 
-export interface MenuItemProps extends RouteComponentProps {
+export interface MenuItemProps {
   section: Section;
 }
 
-const MenuItem: FC<MenuItemProps> = ({ section, history, match }) => {
+const MenuItem: FC<MenuItemProps> = ({ section }) => {
+  let navigate = useNavigate();
+
+  const { pathname } = useLocation();
   return (
     <div
       className={`menu-item ${section.size}`}
-      onClick={() => history.push(`${match.url}${section.linkUrl}`)}
+      onClick={() => navigate(`${pathname}${section.linkUrl}`)}
     >
       <div
         className="background-image"
@@ -27,4 +30,4 @@ const MenuItem: FC<MenuItemProps> = ({ section, history, match }) => {
   );
 };
 
-export default withRouter(MenuItem);
+export default MenuItem;

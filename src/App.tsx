@@ -1,39 +1,38 @@
 import React, { Dispatch } from 'react';
-import { Route, Switch, Redirect } from 'react-router';
+import { Route, Routes, Navigate } from 'react-router';
 import { connect, ConnectedProps } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import firebase from 'firebase/compat';
-
+import { Unsubscribe } from 'firebase/auth';
 import './App.scss';
 
-import HomePage from './pages/homepage/homepage.component';
-import ShopPage from './pages/shop/shop.component';
+import Home from './routes/home/home.component';
+import ShopPage from './routes/shop/shop.component';
 import CheckoutPage from './components/checkout/checkout.component';
-import Header from './components/header/header.component';
-import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import Header from './routes/header/header.component';
+import SignInAndSignUpPage from './routes/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import { selectCurrentUser } from './redux/user/user.selector';
 
 import { setCurrentUser } from './redux/user/user.actions';
 import { IUser, UserActions } from './redux/user/user.types';
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { auth, createUserDocument } from './firebase/firebase.utils';
 import { State } from './redux/root-reducer';
 
 class App extends React.Component<AppProps, State> {
-  unsubscribeFromAuth: firebase.Unsubscribe | null = null;
+  unsubscribeFromAuth: Unsubscribe | null = null;
 
   async componentDidMount() {
     const { setCurrentUser } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
+        const userRef = await createUserDocument(userAuth);
         if (!userRef) return;
-        userRef.onSnapshot(snapshot => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data()
-          });
-        });
+        // userRef.onSnapshot(snapshot => {
+        //   setCurrentUser({
+        //     id: snapshot.id,
+        //     ...snapshot.data()
+        //   });
+        // });
       }
 
       setCurrentUser(null);
@@ -47,22 +46,23 @@ class App extends React.Component<AppProps, State> {
   render() {
     return (
       <div>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/shop" component={ShopPage} />
-          <Route exact path="/checkout" component={CheckoutPage} />
-          <Route
-            exact
-            path="/signin"
-            render={() =>
-              this.props.currentUser ? (
-                <Redirect to="/" />
-              ) : (
-                <SignInAndSignUpPage />
-              )}
-          />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Header />}>
+            <Route index element={<Home />} />
+            <Route path="shop" element={<ShopPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route
+              path="signin"
+              element={
+                this.props.currentUser ? (
+                  <Navigate replace to="/" />
+                ) : (
+                  <SignInAndSignUpPage />
+                )
+              }
+            />
+          </Route>
+        </Routes>
       </div>
     );
   }
