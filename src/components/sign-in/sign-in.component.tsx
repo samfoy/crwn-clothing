@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { FirebaseError } from 'firebase/app';
 
 import CustomButton from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
@@ -28,6 +29,18 @@ const SignIn: FC = () => {
       await signInAuthUserWithEmailAndPassword(email, password);
       setState({ email: '', password: '' });
     } catch (err) {
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case 'auth/wrong-password':
+            alert('incorrect password for email');
+            break;
+          case 'auth/user-not-found':
+            alert('no user associated with this email');
+            break;
+          default:
+            break;
+        }
+      }
       console.error(err);
     }
   };
