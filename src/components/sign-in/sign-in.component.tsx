@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { FirebaseError } from 'firebase/app';
 
 import CustomButton from '../custom-button/custom-button.component';
@@ -25,8 +25,10 @@ const SignIn: FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { email, password } = state;
+
     try {
       await signInAuthUserWithEmailAndPassword(email, password);
+      // setCurrentUser(user);
       setState({ email: '', password: '' });
     } catch (err) {
       if (err instanceof FirebaseError) {

@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import App from './App';
+import { UserProvider } from './contexts/user.context';
 import store from './redux/store';
 
 import './index.css';
@@ -12,7 +13,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <UserProvider>
+          <App />
+        </UserProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

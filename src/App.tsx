@@ -16,6 +16,7 @@ import { setCurrentUser } from './redux/user/user.actions';
 import { IUser, UserActions } from './redux/user/user.types';
 import { auth, createUserDocument } from './firebase/firebase.utils';
 import { State } from './redux/root-reducer';
+import { onSnapshot } from 'firebase/firestore';
 
 class App extends React.Component<AppProps, State> {
   unsubscribeFromAuth: Unsubscribe | null = null;
@@ -27,12 +28,12 @@ class App extends React.Component<AppProps, State> {
       if (userAuth) {
         const userRef = await createUserDocument(userAuth);
         if (!userRef) return;
-        // userRef.onSnapshot(snapshot => {
-        //   setCurrentUser({
-        //     id: snapshot.id,
-        //     ...snapshot.data()
-        //   });
-        // });
+        onSnapshot(userRef, snapshot => {
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data()
+          });
+        });
       }
 
       setCurrentUser(null);
