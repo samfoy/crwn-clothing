@@ -42,7 +42,7 @@ const SignUp: FC = () => {
         password
       );
       createUserDocument(user, { displayName });
-      setState(st => defaultState);
+      setState(() => defaultState);
     } catch (err) {
       console.error(err);
     }

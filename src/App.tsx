@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, useEffect, useRef } from 'react';
+import { Dispatch, FC, useEffect, useRef } from 'react';
 import { Route, Routes, Navigate } from 'react-router';
 import { connect, ConnectedProps } from 'react-redux';
 import { createStructuredSelector } from 'reselect';

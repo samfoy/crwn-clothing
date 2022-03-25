@@ -41,6 +41,8 @@ const Header: FC<HeaderProps> = ({ currentUser, hidden }) => {
         {hidden ? null : <CartDropdown />}
       </div>
       <Outlet />
+
+
     </Fragment>
   );
 };
