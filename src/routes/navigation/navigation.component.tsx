@@ -1,19 +1,21 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { auth } from '../../firebase/firebase.utils';
+import { signOutUser } from '../../firebase/firebase.utils';
+import { UserContext, UserContextType } from '../../contexts/user.context';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
-import { selectCurrentUser } from '../../redux/user/user.selector';
+
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 import CartIcon from '../../components/cart-icon/cart-icon.component';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
-import './header.style.scss';
+import './navigation.style.scss';
 
-const Header: FC<HeaderProps> = ({ currentUser, hidden }) => {
+const Navigation: FC<HeaderProps> = ({ hidden }) => {
+  const { currentUser } = useContext(UserContext) as UserContextType;
   return (
     <Fragment>
       <div className="header">
@@ -28,11 +30,11 @@ const Header: FC<HeaderProps> = ({ currentUser, hidden }) => {
             CONTACT
           </Link>
           {currentUser ? (
-            <div className="option" onClick={() => auth.signOut()}>
+            <div className="option" onClick={signOutUser}>
               SIGN OUT
             </div>
           ) : (
-            <Link className="option" to="/signin">
+            <Link className="option" to="/auth">
               SIGN IN
             </Link>
           )}
@@ -41,14 +43,11 @@ const Header: FC<HeaderProps> = ({ currentUser, hidden }) => {
         {hidden ? null : <CartDropdown />}
       </div>
       <Outlet />
-
-
     </Fragment>
   );
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
   hidden: selectCartHidden
 });
 
@@ -56,4 +55,4 @@ const connector = connect(mapStateToProps);
 
 type HeaderProps = ConnectedProps<typeof connector>;
 
-export default connector(Header);
+export default connector(Navigation);

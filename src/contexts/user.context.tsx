@@ -1,16 +1,32 @@
-import { createContext, FC, useState } from 'react';
-import { IUser } from '../redux/user/user.types';
+import { User } from 'firebase/auth';
+import { createContext, FC, useEffect, useState } from 'react';
+
+import {
+  createUserDocument,
+  onAuthStateChangedListener
+} from '../firebase/firebase.utils';
 
 export type UserContextType = {
-  currentUser: IUser | null;
-  setCurrentUser: (user: IUser | null) => void;
+  currentUser: User | null;
+  setCurrentUser: (user: User | null) => void;
 };
 
 export const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider: FC = ({ children }) => {
-  const [ currentUser, setCurrentUser ] = useState<IUser | null>(null);
+  const [ currentUser, setCurrentUser ] = useState<User | null>(null);
   const value = { currentUser, setCurrentUser };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener(user => {
+      if (user) {
+        createUserDocument(user);
+      }
+      setCurrentUser(user);
+    });
+
+    return unsubscribe;
+  }, []);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

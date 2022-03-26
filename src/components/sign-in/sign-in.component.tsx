@@ -4,32 +4,40 @@ import { FirebaseError } from 'firebase/app';
 import CustomButton from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
 import {
-  createUserDocument,
   signInWithGooglePopup,
   signInAuthUserWithEmailAndPassword
 } from '../../firebase/firebase.utils';
 
 import './sign-in.style.scss';
 
-export interface SignInState {
+interface SignInState {
   email: string;
   password: string;
 }
 
+const defaultState: SignInState = {
+  email: '',
+  password: ''
+};
+
 const SignIn: FC = () => {
-  const [ state, setState ] = useState<SignInState>({
-    email: '',
-    password: ''
-  });
+  const [ state, setState ] = useState(defaultState);
+  const { email, password } = state;
+
+  const resetFormFields = () => {
+    setState(defaultState);
+  };
+
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { email, password } = state;
 
     try {
       await signInAuthUserWithEmailAndPassword(email, password);
-      // setCurrentUser(user);
-      setState({ email: '', password: '' });
+      resetFormFields();
     } catch (err) {
       if (err instanceof FirebaseError) {
         switch (err.code) {
@@ -53,11 +61,6 @@ const SignIn: FC = () => {
       ...st,
       [name]: value
     }));
-  };
-
-  const logGoogleUser = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocument(user);
   };
 
   return (
@@ -84,7 +87,7 @@ const SignIn: FC = () => {
         />
         <div className="buttons">
           <CustomButton type="submit">Sign in</CustomButton>
-          <CustomButton onClick={logGoogleUser} isGoogleSignIn>
+          <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
             Sign in with Google
           </CustomButton>
         </div>

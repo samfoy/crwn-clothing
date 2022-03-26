@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
@@ -9,6 +9,7 @@ import {
 } from '../../firebase/firebase.utils';
 
 import './sign-up.style.scss';
+import { FirebaseError } from 'firebase/app';
 
 interface SignUpState {
   displayName: string;
@@ -41,10 +42,18 @@ const SignUp: FC = () => {
         email,
         password
       );
-      createUserDocument(user, { displayName });
+      await createUserDocument(user, { displayName });
       setState(() => defaultState);
     } catch (err) {
-      console.error(err);
+      if (
+        err instanceof FirebaseError &&
+        err.code === 'auth/email-already-in-use'
+      ) {
+        alert('Cannot create user, email already in use');
+      }
+      else {
+        console.error('User creation error', err);
+      }
     }
   };
 
