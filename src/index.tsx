@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 
 import App from './App';
 import { UserProvider } from './contexts/user.context';
+import { ProductsProvider } from './contexts/products.context';
 import store from './redux/store';
 
 import './index.css';
@@ -14,7 +15,9 @@ ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
         <UserProvider>
-          <App />
+          <ProductsProvider>
+            <App />
+          </ProductsProvider>
         </UserProvider>
       </BrowserRouter>
     </Provider>

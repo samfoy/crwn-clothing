@@ -1,15 +1,12 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import CollectionPreview from '../../components/collection-preview/collection-preview.component';
-import SHOP_DATA from './shop.data';
-
-import { Collection } from '../../types';
-
-const collections: Collection[] = SHOP_DATA;
+import { ProductsContext } from '../../contexts/products.context';
 
 const Shop: FC = () => {
+  const { products } = useContext(ProductsContext);
   return (
     <div className="shop-page">
-      {collections.map(collection => {
+      {products.map(collection => {
         return (
           <CollectionPreview key={collection.id} collection={collection} />
         );
