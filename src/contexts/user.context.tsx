@@ -1,5 +1,5 @@
-import { User } from 'firebase/auth';
 import { createContext, FC, useEffect, useState } from 'react';
+import { User } from 'firebase/auth';
 
 import {
   createUserDocument,

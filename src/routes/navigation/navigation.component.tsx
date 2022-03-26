@@ -1,11 +1,9 @@
 import { FC, Fragment, useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { connect, ConnectedProps } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import { signOutUser } from '../../firebase/firebase.utils';
 import { UserContext, UserContextType } from '../../contexts/user.context';
-import { selectCartHidden } from '../../redux/cart/cart.selectors';
+import { CartContext } from '../../contexts/cart.context';
 
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 import CartIcon from '../../components/cart-icon/cart-icon.component';
@@ -14,8 +12,9 @@ import { ReactComponent as Logo } from '../../assets/crown.svg';
 
 import './navigation.style.scss';
 
-const Navigation: FC<HeaderProps> = ({ hidden }) => {
+const Navigation: FC = () => {
   const { currentUser } = useContext(UserContext) as UserContextType;
+  const { isCartOpen } = useContext(CartContext);
   return (
     <Fragment>
       <div className="header">
@@ -40,19 +39,11 @@ const Navigation: FC<HeaderProps> = ({ hidden }) => {
           )}
           <CartIcon />
         </div>
-        {hidden ? null : <CartDropdown />}
+        {isCartOpen && <CartDropdown />}
       </div>
       <Outlet />
     </Fragment>
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  hidden: selectCartHidden
-});
-
-const connector = connect(mapStateToProps);
-
-type HeaderProps = ConnectedProps<typeof connector>;
-
-export default connector(Navigation);
+export default Navigation;

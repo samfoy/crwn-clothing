@@ -1,15 +1,13 @@
-import { Dispatch, FC } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { FC, useContext } from 'react';
+import { CartContext, Item } from '../../contexts/cart.context';
 
 import CustomButton from '../custom-button/custom-button.component';
-import { addItem } from '../../redux/cart/cart.actions';
-
-import { Item } from '../../types';
 
 import './collection-item.style.scss';
-import { AnyAction } from 'redux';
 
-const CollectionItem: FC<CollectionItemProps> = ({ item, addItem }) => {
+const CollectionItem: FC<CollectionItemProps> = ({ item }) => {
+  const { addItemToCart } = useContext(CartContext);
+  const addProductToCart = () => addItemToCart(item);
   return (
     <div className="collection-item">
       <div
@@ -22,20 +20,15 @@ const CollectionItem: FC<CollectionItemProps> = ({ item, addItem }) => {
         <span className="name">{item.name}</span>
         <span className="price">{item.price}</span>
       </div>
-      <CustomButton inverted onClick={() => addItem(item)}>
+      <CustomButton inverted onClick={addProductToCart}>
         Add to Cart
       </CustomButton>
     </div>
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
-  addItem: (item: Item) => dispatch(addItem(item))
-});
-
-const connector = connect(null, mapDispatchToProps);
-type CollectionItemProps = ConnectedProps<typeof connector> & {
+type CollectionItemProps = {
   item: Item;
 };
 
-export default connector(CollectionItem);
+export default CollectionItem;

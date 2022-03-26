@@ -1,17 +1,14 @@
-import { FC } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import { FC, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AnyAction, Dispatch} from 'redux';
+import { CartContext } from '../../contexts/cart.context';
 
 import CartItem from '../cart-item/cart-item.component';
 import CustomButton from '../custom-button/custom-button.component';
-import { selectCartItems } from '../../redux/cart/cart.selectors';
-import { toggleCartHidden } from '../../redux/cart/cart.actions';
 
 import './cart-dropdown.style.scss';
 
-const CartDropdown: FC<CartDropdownProps> = ({ cartItems, toggleCartHidden }) => {
+const CartDropdown: FC = () => {
+  const { cartItems, toggleCartHidden } = useContext(CartContext);
   let navigate = useNavigate();
   return (
     <div className="cart-dropdown">
@@ -36,15 +33,4 @@ const CartDropdown: FC<CartDropdownProps> = ({ cartItems, toggleCartHidden }) =>
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  cartItems: selectCartItems
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
-  toggleCartHidden: () => dispatch(toggleCartHidden())
-})
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type CartDropdownProps = ConnectedProps<typeof connector>;
-
-export default connector(CartDropdown);
+export default CartDropdown;

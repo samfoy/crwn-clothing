@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { CartItem as CartItemType } from '../../redux/cart/cart.types';
+import { Item } from '../../contexts/cart.context';
 import './cart-item.style.scss';
 
 const CartItem: FC<CartItemProps> = ({
@@ -16,6 +16,6 @@ const CartItem: FC<CartItemProps> = ({
   </div>
 );
 
-type CartItemProps = { item: CartItemType };
+type CartItemProps = { item: Item };
 
 export default CartItem;
