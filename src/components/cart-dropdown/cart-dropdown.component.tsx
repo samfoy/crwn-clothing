@@ -10,6 +10,12 @@ import './cart-dropdown.style.scss';
 const CartDropdown: FC = () => {
   const { cartItems, toggleCartHidden } = useContext(CartContext);
   let navigate = useNavigate();
+
+  const checkoutHandler = () => {
+    navigate('/checkout');
+    toggleCartHidden();
+  };
+
   return (
     <div className="cart-dropdown">
       <div className="cart-items">
@@ -21,14 +27,7 @@ const CartDropdown: FC = () => {
           <span className="empty-message">Your cart is empty</span>
         )}
       </div>
-      <CustomButton
-        onClick={() => {
-          navigate('/checkout');
-          toggleCartHidden();
-        }}
-      >
-        GO TO CHECKOUT{' '}
-      </CustomButton>
+      <CustomButton onClick={checkoutHandler}>GO TO CHECKOUT </CustomButton>
     </div>
   );
 };
