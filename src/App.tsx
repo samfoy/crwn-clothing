@@ -5,7 +5,7 @@ import './App.scss';
 
 import Home from './routes/home/home.component';
 import ShopPage from './routes/shop/shop.component';
-import CheckoutPage from './components/checkout/checkout.component';
+import CheckoutPage from './routes/checkout/checkout.component';
 import Navigation from './routes/navigation/navigation.component';
 import Authentication from './routes/authentication/authentication';
 
